@@ -23,13 +23,13 @@ public class CustomFilter implements GlobalFilter {
         String authorizationHeader = request.getHeaders().getFirst("Authorization");
 
         //if there is any code need to be executed for any particular service then use below if with url pattern
-        // if (request.getURI().toString().contains("/api/student")) {
-
-        // }
-        log.info("Authorization Header ==> " + authorizationHeader);
-        if (authorizationHeader.isEmpty()) {
-            throw new RuntimeException("No Authorization header found");
+        if (request.getURI().toString().contains("/student")) {
+            log.info("Authorization Header ==> " + authorizationHeader);
+            if (authorizationHeader.isEmpty()) {
+                throw new RuntimeException("No Authorization header found");
+            }
         }
+        
         return chain.filter(exchange).then(Mono.fromRunnable(() -> {
             ServerHttpResponse response = exchange.getResponse();
             log.info("Post filter after executing the request and before sending the response to gateway => "
